@@ -1,26 +1,17 @@
 import React from 'react';
-import {
-  GridActionsCellItem,
-  GridColDef,
-  GridRowId,
-  GridValueGetterParams,
-} from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+
 import Button from '@mui/material/Button';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+
 import AddIcon from '@mui/icons-material/Add';
 import MenuBar from '../components/MenuBar';
 import DeletePopup from '../components/common/DeletePopup';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { hotels } from './StaticJson';
-import DataGridMi from './common/DataGridMi';
+import CommonDataGrid from './common/CommonDataGrid';
 
 const hotelsList = hotels;
 if (localStorage.getItem("hotels") === null) {
@@ -33,8 +24,7 @@ const DashBoard = () => {
     name: "",
     email: "",
     mobile: "",
-    starRating: "",
-    image: null,
+    starRating: ""
   });
   const [open, setOpen] = React.useState(false);
   const [hotels, setHotels] = React.useState(JSON.parse(localStorage.getItem("hotels")));
@@ -68,8 +58,7 @@ const DashBoard = () => {
       name: "",
       email: "",
       mobile: "",
-      starRating: "",
-      image: null
+      starRating: ""
     });
     setOpenAdd(true);
   };
@@ -265,44 +254,13 @@ const DashBoard = () => {
   }
   const onSubmit = data => console.log(data);
 
-
-
-  const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 130 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'mobile', headerName: 'Phone', width: 130 },
-    { field: 'email', headerName: 'Email', width: 130 },
-    { field: 'starRating', headerName: 'Star Rating', width: 130 },
-    { field: 'image', headerName: 'Image', width: 130, renderCell: (params) => <img src={params.value} /> },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: "Actions",
-      hide: role != 1 ? true : false,
-      getActions: (params: GridRowParams) => {
-        return [
-          <GridActionsCellItem icon={<DeleteIcon />} onClick={(e) => handleOpen(params.id)} />,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={(e) => handleEditClick(params)}
-            color="inherit"
-          />,
-        ];
-
-      }
-    }
-  ]
-
-
   if (!hotels || hotels.length === 0) return <p>No hotels, sorry</p>;
   return (
     <>
       <MenuBar />
 
       <div style={{ height: 400, width: '100%', paddingLeft: 250 }}>
-        <DataGridMi rows={hotels} columns={columns} processRowUpdate={processRowUpdate} onCellEditCommit={onCellEditCommit}/>
+        <CommonDataGrid rows={hotels} handleEditClick={handleEditClick} role={role} handleOpen={handleOpen} processRowUpdate={processRowUpdate} onCellEditCommit={onCellEditCommit}/>
         {role == 1 ?
           <Button color="primary" id="addHotel" className="addHotel" startIcon={<AddIcon />} onClick={(e) => handleClickAdd(e)} >
             Add Hotel
